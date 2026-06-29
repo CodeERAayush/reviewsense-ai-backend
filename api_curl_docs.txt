@@ -1,0 +1,83 @@
+# ReviewSenseAI Backend API cURL Documentation
+
+Base URL: http://localhost:3000
+
+Note: For endpoints that require authentication (Play Store and App Store routes), you need to include the JWT token in the Authorization header. First, login or signup to get the token. Replace `<YOUR_JWT_TOKEN>` with the actual token.
+
+## 1. General Routes
+
+### Health Check
+```bash
+curl -X GET http://localhost:3000/health
+```
+
+---
+
+## 2. Authentication Routes
+
+### Signup
+Create a new user.
+```bash
+curl -X POST http://localhost:3000/api/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "mobile": "1234567890",
+    "email": "johndoe@example.com",
+    "password": "securepassword123",
+    "appStoreId": "optional_app_id",
+    "playStoreId": "optional_play_id"
+  }'
+```
+
+### Login
+Login to get a JWT token.
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "johndoe@example.com",
+    "password": "securepassword123"
+  }'
+```
+
+---
+
+## 3. Play Store Routes (Requires Authentication)
+
+### Get Play Store App Reviews
+Fetch reviews for a specific Google Play Store app.
+- `appId` (required): The package name of the app (e.g., com.whatsapp).
+- `items` (optional): Number of reviews to fetch (default: 100).
+```bash
+curl -X GET "http://localhost:3000/api/play-store/reviews?appId=com.whatsapp&items=100" \
+  -H "Authorization: Bearer <YOUR_JWT_TOKEN>"
+```
+
+### Get Play Store App Details
+Fetch metadata and details for a specific Google Play Store app.
+- `appId` (required): The package name of the app (e.g., com.whatsapp).
+```bash
+curl -X GET "http://localhost:3000/api/play-store/app-details?appId=com.whatsapp" \
+  -H "Authorization: Bearer <YOUR_JWT_TOKEN>"
+```
+
+---
+
+## 4. App Store Routes (Requires Authentication)
+
+### Get App Store App Reviews
+Fetch reviews for a specific Apple App Store app.
+- `appId` (required): The App Store ID (e.g., 310633997 for WhatsApp).
+```bash
+curl -X GET "http://localhost:3000/api/app-store/reviews?appId=310633997" \
+  -H "Authorization: Bearer <YOUR_JWT_TOKEN>"
+```
+
+### Get App Store App Details
+Fetch metadata and details for a specific Apple App Store app.
+- `appId` (required): The App Store ID (e.g., 310633997 for WhatsApp).
+```bash
+curl -X GET "http://localhost:3000/api/app-store/app-details?appId=310633997" \
+  -H "Authorization: Bearer <YOUR_JWT_TOKEN>"
+```
